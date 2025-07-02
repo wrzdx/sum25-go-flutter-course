@@ -2,24 +2,24 @@ package user
 
 import (
 	"errors"
-	"fmt"
 	"strings"
+	"fmt"
 )
 
-// Predefined errors
 var (
-	ErrInvalidEmail = errors.New("invalid email format")
+	ErrInvalidName  = errors.New("invalid name: must be between 1 and 30 characters")
 	ErrInvalidAge   = errors.New("invalid age: must be between 0 and 150")
-	ErrEmptyName    = errors.New("name cannot be empty")
+	ErrInvalidEmail = errors.New("invalid email format")
 )
 
+// User represents a user in the system
 type User struct {
 	Name  string
 	Age   int
 	Email string
 }
 
-
+// NewUser creates a new user with validation
 func NewUser(name string, age int, email string) (*User, error) {
 	user := &User{
 		Name:  name,
@@ -27,50 +27,36 @@ func NewUser(name string, age int, email string) (*User, error) {
 		Email: email,
 	}
 
-	if err := user.Validate(); err != nil {
+	err := user.Validate();
+
+	if err != nil {
 		return nil, err
 	}
-
 	return user, nil
 }
 
+// Validate checks if the user data is valid
 func (u *User) Validate() error {
-	if strings.TrimSpace(u.Name) == "" {
-		return ErrEmptyName
-	}
-
-	if u.Age < 0 || u.Age > 150 {
-		return ErrInvalidAge
-	}
-
 	if !IsValidEmail(u.Email) {
 		return ErrInvalidEmail
 	}
-
+	if u.Age < 0 || u.Age > 150 {
+		return ErrInvalidAge
+	}
+	if strings.TrimSpace(u.Name) == "" {
+		return ErrInvalidName
+	}
 	return nil
 }
 
-
+// String returns a string representation of the user
 func (u *User) String() string {
-	return fmt.Sprintf("User{Name: %s, Age: %d, Email: %s}", u.Name, u.Age, u.Email)
+	return fmt.Sprintf("Name: %s, Age: %d, Email: %s", u.Name, u.Age, u.Email)
 }
 
+// IsValidEmail checks if the email format is valid
 func IsValidEmail(email string) bool {
-	if len(email) < 3 || !strings.Contains(email, "@") {
-		return false
-	}
-	
-	parts := strings.Split(email, "@")
-	if len(parts) != 2 {
-		return false
-	}
-	
-	return len(parts[0]) > 0 && len(parts[1]) > 0 && strings.Contains(parts[1], ".")
-
-}
-
-// IsValidAge checks if the age is valid, returns false if the age is not between 0 and 150
-func IsValidAge(age int) bool {
-	// TODO: Implement this function
-	return false
+	at := strings.Index(email, "@")
+	dot := strings.LastIndex(email, ".")
+	return at > 0 && dot > at+1 && dot < len(email)-1
 }

@@ -16,34 +16,45 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+    return Card(
+      margin: const EdgeInsets.all(16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             CircleAvatar(
-              radius: 40,
-              backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null,
-              backgroundColor: Colors.grey.shade300,
+              radius: 50,
+              backgroundImage:
+                  avatarUrl != null ? NetworkImage(avatarUrl!) : null,
               child: avatarUrl == null
                   ? Text(
-                      name.isNotEmpty ? name[0] : '',
-                      style: const TextStyle(fontSize: 24),
+                      (name.isNotEmpty ? name[0].toUpperCase() : '?'),
+                      style: const TextStyle(fontSize: 32),
                     )
                   : null,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name),
-                  const SizedBox(height: 4),
-                  Text(email),
-                  const SizedBox(height: 4),
-                  Text('Age: $age'),
-                ],
+            const SizedBox(height: 16),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Age: $age',
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              email,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
               ),
             ),
           ],
