@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Predefined errors
 var (
 	ErrInvalidEmail = errors.New("invalid email format")
 	ErrInvalidAge   = errors.New("invalid age: must be between 0 and 150")
@@ -17,6 +18,7 @@ type User struct {
 	Age   int
 	Email string
 }
+
 
 func NewUser(name string, age int, email string) (*User, error) {
 	user := &User{
@@ -48,6 +50,7 @@ func (u *User) Validate() error {
 	return nil
 }
 
+
 func (u *User) String() string {
 	return fmt.Sprintf("User{Name: %s, Age: %d, Email: %s}", u.Name, u.Age, u.Email)
 }
@@ -63,4 +66,11 @@ func IsValidEmail(email string) bool {
 	}
 	
 	return len(parts[0]) > 0 && len(parts[1]) > 0 && strings.Contains(parts[1], ".")
+
+}
+
+// IsValidAge checks if the age is valid, returns false if the age is not between 0 and 150
+func IsValidAge(age int) bool {
+	// TODO: Implement this function
+	return false
 }
